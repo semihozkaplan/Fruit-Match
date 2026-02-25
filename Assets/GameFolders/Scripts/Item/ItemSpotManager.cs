@@ -19,16 +19,6 @@ public class ItemSpotManager : MonoBehaviour
        InputManager.OnItemClicked -= HandleItemClicked;
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     private void HandleItemClicked(Item item)
     {
         // Turn the item as a child of the item spot
