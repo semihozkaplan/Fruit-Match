@@ -1,12 +1,10 @@
-using System.Buffers.Text;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(SphereCollider))]
+[RequireComponent(typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
     [Header("Elements")]
-    private Rigidbody _rigidbody;
-    private Collider _collider;
+    [SerializeField] private Collider _collider;
     // Outline Shader - Selection
     [SerializeField] private Renderer _renderer;
     private Material _baseMat;
@@ -22,10 +20,8 @@ public class Item : MonoBehaviour
 
     public void DisablePhysics()
     {
-        if (TryGetComponent(out _rigidbody))
-            _rigidbody.isKinematic = true;
-            
-        if (TryGetComponent(out _collider))
+        GetComponent<Rigidbody>().isKinematic = true; 
+        if (_collider != null)
             _collider.enabled = false;
     }
 
