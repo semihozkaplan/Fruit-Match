@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 155725780}
   - component: {fileID: 155725779}
   m_Layer: 0
-  m_Name: ItemSpotManager
+  m_Name: '[ItemSpotManager]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -706,8 +706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca2acfe448341342a88d3a99fec7efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  _rigidbody: {fileID: 642266140}
-  _collider: {fileID: 642266136}
+  _renderer: {fileID: 232488989}
 --- !u!1 &749683315
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,7 +895,7 @@ GameObject:
   - component: {fileID: 1528333561}
   - component: {fileID: 1528333560}
   m_Layer: 0
-  m_Name: InputManager
+  m_Name: '[InputManager]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -914,6 +913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936269c010159954dbd2183579a57332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputManager
+  _outlineMat: {fileID: 2100000, guid: 23a3bfe43d0707e4d844734c3e2cd57f, type: 2}
 --- !u!4 &1528333561
 Transform:
   m_ObjectHideFlags: 0
