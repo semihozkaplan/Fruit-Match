@@ -187,3 +187,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item
   _collider: {fileID: 9047508549174675563}
   _renderer: {fileID: 7449778067002115936}
+  _itemType: 1
