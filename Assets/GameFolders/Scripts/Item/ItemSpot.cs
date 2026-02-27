@@ -13,6 +13,9 @@ public class ItemSpot : MonoBehaviour
 
     public bool IsEmpty()
     {
-        return _item == null;
+        if (_item == null)
+            return true;
+        else
+            return false;
     }
 }
