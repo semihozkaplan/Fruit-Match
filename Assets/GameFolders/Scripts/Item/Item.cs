@@ -9,6 +9,10 @@ public class Item : MonoBehaviour
     [SerializeField] private Renderer _renderer;
     private Material _baseMat;
 
+    [Header("Data")]
+    [SerializeField] private EItemType _itemType;
+    public EItemType ItemType => _itemType;
+
     void Awake()
     {
         _baseMat = _renderer.material;    
