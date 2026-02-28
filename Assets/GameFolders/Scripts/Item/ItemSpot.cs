@@ -9,6 +9,7 @@ public class ItemSpot : MonoBehaviour
     {
         _item = item;
         item.transform.SetParent(this.transform);
+        item.SetItemSpot(this);
     }
 
     public bool IsEmpty()

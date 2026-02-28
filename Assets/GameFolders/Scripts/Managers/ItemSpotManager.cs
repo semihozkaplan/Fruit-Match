@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ItemSpotManager : MonoBehaviour
@@ -14,7 +15,7 @@ public class ItemSpotManager : MonoBehaviour
     private bool _isBusy;
 
     [Header("Data")]
-    private Dictionary<EItemType, ItemMergeData> _itemMergeData = new Dictionary<EItemType, ItemMergeData>();
+    private Dictionary<EItemType, ItemMergeData> _itemMergeDataDictionary = new Dictionary<EItemType, ItemMergeData>();
 
     void Awake()
     {
@@ -51,13 +52,72 @@ public class ItemSpotManager : MonoBehaviour
 
     private void HandleClickOnItem(Item item)
     {
-        if (_itemMergeData.ContainsKey(item.ItemType))
+        if (_itemMergeDataDictionary.ContainsKey(item.ItemType))
             HandleItemMergeDataFound(item);
         else
             MoveToFirstEmptySpot(item);
     }
 
     private void HandleItemMergeDataFound(Item item)
+    {
+        ItemSpot correctSpot = GetCorrectSpot(item);
+  
+        _itemMergeDataDictionary[item.ItemType].AddItemToList(item);
+
+        TryMoveItemToCorrectSpot(item, correctSpot);
+    }
+
+    private ItemSpot GetCorrectSpot(Item item)
+    {
+        List<Item> items = _itemMergeDataDictionary[item.ItemType].items;
+        List<ItemSpot> itemSpots = new List<ItemSpot>();
+
+        // In here, we are having all item spots that has been using with same type
+        for (int i = 0; i < items.Count; i++)
+        {
+            itemSpots.Add(items[i].ItemSpot); 
+        }
+
+        // If we have only one spot than grab the next spot
+        if (itemSpots.Count >= 2)
+        {
+            // Compare it, if b transform is bigger then sort it, in this way we can access the most right one spot as first index
+            itemSpots.Sort((a, b) => b.transform.GetSiblingIndex().CompareTo(a.transform.GetSiblingIndex()));
+        }
+
+        int correctSpotIndex = itemSpots[0].transform.GetSiblingIndex() + 1;
+
+        return _itemSpots[correctSpotIndex];
+    }
+
+    private void TryMoveItemToCorrectSpot(Item item, ItemSpot correctSpot)
+    {
+        if (!correctSpot.IsEmpty())
+        {
+            HandleCorrectSpotFull(item, correctSpot);
+            return;
+        }
+
+        MoveItemToTargetSpot(item, correctSpot);
+    }
+
+    private void MoveItemToTargetSpot(Item item, ItemSpot targetSpot)
+    {
+        targetSpot.SetItem(item);
+
+        // Scale the item down, set its loacl position 0,0,0
+        item.transform.localPosition = _itemLocalPosOnSpot;
+        item.transform.localScale = _itemLocalScaleOnSpot;
+        item.transform.localRotation = Quaternion.identity;
+        // Disable its shadow
+        item.DisableShadows();
+        // Disable its collider - physics
+        item.DisablePhysics();
+
+        HandleFirstItemReachedSpot(item);
+    }
+
+    private void HandleCorrectSpotFull(Item item, ItemSpot correctSpot)
     {
         throw new NotImplementedException();
     }
@@ -103,7 +163,7 @@ public class ItemSpotManager : MonoBehaviour
 
     private void CreateItemMergeData(Item item)
     {
-        _itemMergeData.Add(item.ItemType, new ItemMergeData(item));
+        _itemMergeDataDictionary.Add(item.ItemType, new ItemMergeData(item));
     }
 
     private ItemSpot GetEmptySpot()

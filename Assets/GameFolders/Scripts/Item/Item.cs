@@ -9,6 +9,9 @@ public class Item : MonoBehaviour
     [SerializeField] private Renderer _renderer;
     private Material _baseMat;
 
+    private ItemSpot _itemSpot;
+    public ItemSpot ItemSpot => _itemSpot;
+
     [Header("Data")]
     [SerializeField] private EItemType _itemType;
     public EItemType ItemType => _itemType;
@@ -28,6 +31,11 @@ public class Item : MonoBehaviour
         GetComponent<Rigidbody>().isKinematic = true; 
         if (_collider != null)
             _collider.enabled = false;
+    }
+
+    public void SetItemSpot(ItemSpot itemSpot)
+    {
+        _itemSpot = itemSpot;
     }
 
     public void SelectItem(Material outlineMat)
