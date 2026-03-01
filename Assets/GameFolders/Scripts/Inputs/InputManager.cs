@@ -27,19 +27,17 @@ public class InputManager : MonoBehaviour
             DeselectCurrentItem();
             return;
         }
-
         if (hit.collider.transform.parent == null)
         {
             return;
         }
-
         if (!hit.collider.transform.parent.TryGetComponent(out Item item))
         {
             DeselectCurrentItem();
             return;
         }
-
         DeselectCurrentItem();
+
         _currentItem = item;
         _currentItem.SelectItem(_outlineMat);
     }

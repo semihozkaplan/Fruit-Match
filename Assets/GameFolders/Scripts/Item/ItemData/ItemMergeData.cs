@@ -2,13 +2,12 @@ using System.Collections.Generic;
 
 public struct ItemMergeData
 {
-    //public string itemName;
+    public EItemType itemType;
     public List<Item> items;
 
     public ItemMergeData(Item initalItem)
     {
-        // İstersek item tipini enum yerine string olarak kullanabiliriz.
-        //itemName = initalItem.name;
+        itemType = initalItem.ItemType;
 
         items = new List<Item>();
         items.Add(initalItem);
@@ -17,5 +16,10 @@ public struct ItemMergeData
     public void AddItemToList(Item item)
     {
         items.Add(item);
+    }
+
+    public bool CanMerge()
+    {
+        return items.Count >= 3;
     }
 }

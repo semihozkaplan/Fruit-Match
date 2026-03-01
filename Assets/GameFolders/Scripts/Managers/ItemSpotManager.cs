@@ -114,7 +114,35 @@ public class ItemSpotManager : MonoBehaviour
         // Disable its collider - physics
         item.DisablePhysics();
 
-        HandleFirstItemReachedSpot(item);
+        HandleItemPlacedOnCorrectSpot(item);
+    }
+
+    private void HandleItemPlacedOnCorrectSpot(Item item)
+    {
+        if (_itemMergeDataDictionary[item.ItemType].CanMerge())
+        {
+            MergeSameItems(_itemMergeDataDictionary[item.ItemType]);
+        }
+        else
+        {
+            CheckGameOver();
+        }
+    }
+
+    private void MergeSameItems(ItemMergeData itemMergeData)
+    {
+        List<Item> items = itemMergeData.items;
+
+        _itemMergeDataDictionary.Remove(itemMergeData.itemType);
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].ItemSpot.ClearItem();
+            Destroy(items[i].gameObject, 0.5f);
+        }
+
+        // TODO: This will be deleted after we handle moving items to the left
+        _isBusy = false;
     }
 
     private void HandleCorrectSpotFull(Item item, ItemSpot correctSpot)
@@ -145,10 +173,10 @@ public class ItemSpotManager : MonoBehaviour
         // Disable its collider - physics
         item.DisablePhysics();
 
-        HandleFirstItemReachedSpot(item);
+        HandleFirstItemPlacedOnSpot(item);
     }
 
-    private void HandleFirstItemReachedSpot(Item item)
+    private void HandleFirstItemPlacedOnSpot(Item item)
     {
         CheckGameOver();
     }

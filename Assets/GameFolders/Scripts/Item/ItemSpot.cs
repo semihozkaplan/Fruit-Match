@@ -19,4 +19,9 @@ public class ItemSpot : MonoBehaviour
         else
             return false;
     }
+
+    public void ClearItem()
+    {
+        _item = null;
+    }
 }
