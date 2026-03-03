@@ -101,7 +101,7 @@ public class ItemSpotManager : MonoBehaviour
         MoveItemToTargetSpot(item, correctSpot);
     }
 
-    private void MoveItemToTargetSpot(Item item, ItemSpot targetSpot)
+    private void MoveItemToTargetSpot(Item item, ItemSpot targetSpot, bool checkMerge = true)
     {
         targetSpot.SetItem(item);
 
@@ -114,11 +114,14 @@ public class ItemSpotManager : MonoBehaviour
         // Disable its collider - physics
         item.DisablePhysics();
 
-        HandleItemPlacedOnCorrectSpot(item);
+        HandleItemPlacedOnCorrectSpot(item, checkMerge);
     }
 
-    private void HandleItemPlacedOnCorrectSpot(Item item)
+    private void HandleItemPlacedOnCorrectSpot(Item item, bool checkMerge)
     {
+        if (!checkMerge)
+            return;
+
         if (_itemMergeDataDictionary[item.ItemType].CanMerge())
         {
             MergeSameItems(_itemMergeDataDictionary[item.ItemType]);
@@ -138,16 +141,47 @@ public class ItemSpotManager : MonoBehaviour
         for (int i = 0; i < items.Count; i++)
         {
             items[i].ItemSpot.ClearItem();
-            Destroy(items[i].gameObject, 0.5f);
+            Destroy(items[i].gameObject);
         }
 
         // TODO: This will be deleted after we handle moving items to the left
         _isBusy = false;
     }
 
-    private void HandleCorrectSpotFull(Item item, ItemSpot correctSpot)
+    private void HandleCorrectSpotFull(Item comingItem, ItemSpot correctSpot)
     {
-        throw new NotImplementedException();
+        MoveItemsToTheRightSide(comingItem, correctSpot);
+    }
+
+    private void MoveItemsToTheRightSide(Item comingItem, ItemSpot correctSpot)
+    {
+        // Check right spots first
+        int itemSpotIndex = correctSpot.transform.GetSiblingIndex();
+        for (int i = _itemSpots.Length - 2; i >= itemSpotIndex; i--)
+        {
+            ItemSpot itemSpot = _itemSpots[i];
+
+            if (itemSpot.IsEmpty())
+                continue;
+
+            // This is the item we want to move to the right spot
+            Item item = itemSpot.Item;
+            // Clear the next right spot
+            itemSpot.ClearItem();
+            // Store the next right spot
+            ItemSpot targetSpot = _itemSpots[i + 1];
+
+            if (!targetSpot.IsEmpty())
+            {
+                Debug.LogError("Error: Something went wrong, please check the logic!");
+                _isBusy = false;
+                return;
+            }
+
+            MoveItemToTargetSpot(item, targetSpot, false);
+        }
+
+        MoveItemToTargetSpot(comingItem, correctSpot);
     }
 
     private void MoveToFirstEmptySpot(Item item)
