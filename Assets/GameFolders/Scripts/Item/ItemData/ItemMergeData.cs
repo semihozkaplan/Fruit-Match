@@ -13,13 +13,6 @@ public struct ItemMergeData
         items.Add(initalItem);
     }
 
-    public void AddItemToList(Item item)
-    {
-        items.Add(item);
-    }
-
-    public bool CanMerge()
-    {
-        return items.Count >= 3;
-    }
+    public void AddItemToList(Item item) => items.Add(item);
+    public bool CanMerge() => items.Count >= 3;
 }

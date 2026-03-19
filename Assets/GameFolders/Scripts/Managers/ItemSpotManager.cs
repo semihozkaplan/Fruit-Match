@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ItemSpotManager : MonoBehaviour
@@ -144,8 +142,37 @@ public class ItemSpotManager : MonoBehaviour
             Destroy(items[i].gameObject);
         }
 
-        // TODO: This will be deleted after we handle moving items to the left
+        MoveItemsToTheLeftSide();
+    }
+
+    private void MoveItemsToTheLeftSide()
+    {
+        for (int i = 3; i < _itemSpots.Length; i++)
+        {
+            ItemSpot itemSpot = _itemSpots[i];
+
+            if (itemSpot.IsEmpty())
+                continue;
+
+            Item item = itemSpot.Item;
+            itemSpot.ClearItem();
+            ItemSpot targetSpot = _itemSpots[i - 3];
+
+            if (!targetSpot.IsEmpty())
+            {
+                Debug.LogError("Error: Something went wrong, please check the logic!");
+                _isBusy = false;
+                return;
+            }
+            MoveItemToTargetSpot(item, targetSpot, false);
+        }
+        HandleAllItemsMovedLeft();
+    }
+
+    private void HandleAllItemsMovedLeft()
+    {
         _isBusy = false;
+        // Anim will added
     }
 
     private void HandleCorrectSpotFull(Item comingItem, ItemSpot correctSpot)
