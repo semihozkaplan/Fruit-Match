@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class ItemSpotManager : MonoBehaviour
 {
@@ -96,10 +98,10 @@ public class ItemSpotManager : MonoBehaviour
             return;
         }
 
-        MoveItemToTargetSpot(item, correctSpot);
+        MoveItemToTargetSpot(item, correctSpot, ()=>HandleItemPlacedOnCorrectSpot(item));
     }
 
-    private void MoveItemToTargetSpot(Item item, ItemSpot targetSpot, bool checkMerge = true)
+    private void MoveItemToTargetSpot(Item item, ItemSpot targetSpot, Action completeCallback)
     {
         targetSpot.SetItem(item);
 
@@ -112,10 +114,10 @@ public class ItemSpotManager : MonoBehaviour
         // Disable its collider - physics
         item.DisablePhysics();
 
-        HandleItemPlacedOnCorrectSpot(item, checkMerge);
+        completeCallback?.Invoke();
     }
 
-    private void HandleItemPlacedOnCorrectSpot(Item item, bool checkMerge)
+    private void HandleItemPlacedOnCorrectSpot(Item item, bool checkMerge = true)
     {
         if (!checkMerge)
             return;
@@ -164,7 +166,7 @@ public class ItemSpotManager : MonoBehaviour
                 _isBusy = false;
                 return;
             }
-            MoveItemToTargetSpot(item, targetSpot, false);
+            MoveItemToTargetSpot(item, targetSpot, () => HandleItemPlacedOnCorrectSpot(item, false));
         }
         HandleAllItemsMovedLeft();
     }
@@ -205,10 +207,10 @@ public class ItemSpotManager : MonoBehaviour
                 return;
             }
 
-            MoveItemToTargetSpot(item, targetSpot, false);
+            MoveItemToTargetSpot(item, targetSpot, () => HandleItemPlacedOnCorrectSpot(item, false));
         }
 
-        MoveItemToTargetSpot(comingItem, correctSpot);
+        MoveItemToTargetSpot(comingItem, correctSpot, () => HandleItemPlacedOnCorrectSpot(comingItem));
     }
 
     private void MoveToFirstEmptySpot(Item item)
@@ -223,18 +225,7 @@ public class ItemSpotManager : MonoBehaviour
 
         CreateItemMergeData(item);
 
-        targetSpot.SetItem(item);
-
-        // Scale the item down, set its loacl position 0,0,0
-        item.transform.localPosition = _itemLocalPosOnSpot;
-        item.transform.localScale = _itemLocalScaleOnSpot;
-        item.transform.localRotation = Quaternion.identity;
-        // Disable its shadow
-        item.DisableShadows();
-        // Disable its collider - physics
-        item.DisablePhysics();
-
-        HandleFirstItemPlacedOnSpot(item);
+        MoveItemToTargetSpot(item, targetSpot, () => HandleFirstItemPlacedOnSpot(item));
     }
 
     private void HandleFirstItemPlacedOnSpot(Item item)
