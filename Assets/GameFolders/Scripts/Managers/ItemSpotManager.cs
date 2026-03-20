@@ -14,6 +14,10 @@ public class ItemSpotManager : MonoBehaviour
     [SerializeField] private Vector3 _itemLocalScaleOnSpot;
     private bool _isBusy;
 
+    [Header("Animation Settings")]
+    [SerializeField] private float _animDuration = 0.2f;
+    [SerializeField] private LeanTweenType _animType = LeanTweenType.easeOutQuart;
+
     [Header("Data")]
     private Dictionary<EItemType, ItemMergeData> _itemMergeDataDictionary = new Dictionary<EItemType, ItemMergeData>();
 
@@ -105,20 +109,31 @@ public class ItemSpotManager : MonoBehaviour
     {
         targetSpot.SetItem(item);
 
-        // Scale the item down, set its loacl position 0,0,0
-        item.transform.localPosition = _itemLocalPosOnSpot;
-        item.transform.localScale = _itemLocalScaleOnSpot;
-        item.transform.localRotation = Quaternion.identity;
+        // Scale the item down, set its local position 0,0,0
+        //item.transform.localPosition = _itemLocalPosOnSpot;
+        //item.transform.localScale = _itemLocalScaleOnSpot;
+        //item.transform.localRotation = Quaternion.identity;
+
+        // Animate and move items
+        LeanTween.moveLocal(item.gameObject, _itemLocalPosOnSpot, _animDuration)
+            .setEase(_animType);
+        LeanTween.scale(item.gameObject, _itemLocalScaleOnSpot, _animDuration)
+            .setEase(_animType);
+        LeanTween.rotateLocal(item.gameObject, Vector3.zero, _animDuration)
+            .setOnComplete(completeCallback);
+
         // Disable its shadow
         item.DisableShadows();
         // Disable its collider - physics
         item.DisablePhysics();
 
-        completeCallback?.Invoke();
+        
     }
 
     private void HandleItemPlacedOnCorrectSpot(Item item, bool checkMerge = true)
     {
+        item.ItemSpot.PlacedAnim();
+
         if (!checkMerge)
             return;
 
@@ -144,11 +159,20 @@ public class ItemSpotManager : MonoBehaviour
             Destroy(items[i].gameObject);
         }
 
-        MoveItemsToTheLeftSide();
+        // If all items that has been selected all merged, and no items moving to left
+        if (_itemMergeDataDictionary.Count <= 0)
+        {
+            _isBusy = false;
+        }
+        else
+        {
+            MoveItemsToTheLeftSide(HandleAllItemsMovedLeft);
+        }    
     }
 
-    private void MoveItemsToTheLeftSide()
+    private void MoveItemsToTheLeftSide(Action completeCallback)
     {
+        bool callbackInvoked = false;
         for (int i = 3; i < _itemSpots.Length; i++)
         {
             ItemSpot itemSpot = _itemSpots[i];
@@ -166,15 +190,18 @@ public class ItemSpotManager : MonoBehaviour
                 _isBusy = false;
                 return;
             }
-            MoveItemToTargetSpot(item, targetSpot, () => HandleItemPlacedOnCorrectSpot(item, false));
+            completeCallback += () => HandleItemPlacedOnCorrectSpot(item, false);
+            MoveItemToTargetSpot(item, targetSpot, completeCallback);
+
+            callbackInvoked = true;
         }
-        HandleAllItemsMovedLeft();
+        if (!callbackInvoked)
+            completeCallback?.Invoke();
     }
 
     private void HandleAllItemsMovedLeft()
     {
         _isBusy = false;
-        // Anim will added
     }
 
     private void HandleCorrectSpotFull(Item comingItem, ItemSpot correctSpot)
@@ -230,6 +257,7 @@ public class ItemSpotManager : MonoBehaviour
 
     private void HandleFirstItemPlacedOnSpot(Item item)
     {
+        item.ItemSpot.PlacedAnim();
         CheckGameOver();
     }
 
