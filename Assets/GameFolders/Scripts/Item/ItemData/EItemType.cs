@@ -1,6 +1,6 @@
 public enum EItemType
 {
-    Apple = 0,
+    Pineapple = 0,
     Orange = 1,
     Banana = 2
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class ItemSpotManager : MonoBehaviour
 {
@@ -20,6 +19,9 @@ public class ItemSpotManager : MonoBehaviour
 
     [Header("Data")]
     private Dictionary<EItemType, ItemMergeData> _itemMergeDataDictionary = new Dictionary<EItemType, ItemMergeData>();
+
+    [Header("Actions")]
+    public static Action<List<Item>> OnMergeStarted;
 
     void Awake()
     {
@@ -109,11 +111,6 @@ public class ItemSpotManager : MonoBehaviour
     {
         targetSpot.SetItem(item);
 
-        // Scale the item down, set its local position 0,0,0
-        //item.transform.localPosition = _itemLocalPosOnSpot;
-        //item.transform.localScale = _itemLocalScaleOnSpot;
-        //item.transform.localRotation = Quaternion.identity;
-
         // Animate and move items
         LeanTween.moveLocal(item.gameObject, _itemLocalPosOnSpot, _animDuration)
             .setEase(_animType);
@@ -126,8 +123,6 @@ public class ItemSpotManager : MonoBehaviour
         item.DisableShadows();
         // Disable its collider - physics
         item.DisablePhysics();
-
-        
     }
 
     private void HandleItemPlacedOnCorrectSpot(Item item, bool checkMerge = true)
@@ -156,7 +151,7 @@ public class ItemSpotManager : MonoBehaviour
         for (int i = 0; i < items.Count; i++)
         {
             items[i].ItemSpot.ClearItem();
-            Destroy(items[i].gameObject);
+            //Destroy(items[i].gameObject);
         }
 
         // If all items that has been selected all merged, and no items moving to left
@@ -167,7 +162,9 @@ public class ItemSpotManager : MonoBehaviour
         else
         {
             MoveItemsToTheLeftSide(HandleAllItemsMovedLeft);
-        }    
+        }
+
+        OnMergeStarted?.Invoke(items);
     }
 
     private void MoveItemsToTheLeftSide(Action completeCallback)
