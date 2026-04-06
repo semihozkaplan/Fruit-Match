@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 2099712449986251393}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.46598, y: 1.35, z: -3.00467}
+  m_LocalPosition: {x: 0, y: 1.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -150,8 +150,8 @@ MonoBehaviour:
     itemAmount: 27
     isGoal: 0
   - itemPrefab: {fileID: 6578449836891502346, guid: 3a1a36df49b36c24bb26f432b4869d3f, type: 3}
-    itemAmount: 9
-    isGoal: 0
+    itemAmount: 3
+    isGoal: 1
   _spawnZone: {fileID: 4755424553981926654}
   _seed: 3
 --- !u!65 &4755424553981926654
