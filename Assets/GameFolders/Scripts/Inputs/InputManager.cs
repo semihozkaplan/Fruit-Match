@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private Material _outlineMat;
     private Item _currentItem;
-
+        
     void Update()
     {
         if (Input.GetMouseButton(0))
