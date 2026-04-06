@@ -10,6 +10,8 @@ public class ItemMergeManager : MonoBehaviour
     [SerializeField] private LeanTweenType _moveUpEase;
     [SerializeField] private float _splashDuration;
     [SerializeField] private LeanTweenType _splashEase;
+    [SerializeField] private float _splashScaleDuration = 0.5f;
+    [SerializeField] private LeanTweenType _splashScaleEase;
 
     [Header("Effects")]
     [SerializeField] private ParticleSystem _splashParticles;
@@ -46,14 +48,27 @@ public class ItemMergeManager : MonoBehaviour
     {
         // We sorted items, in this way we can find the left, middle and right items
         items.Sort((a, b) => a.transform.position.x.CompareTo(b.transform.position.x));
-
+        // TODO: Itemlerin pivoıt noktaları biraz aşağı tarafta olduğu için scale ederken bir tık aşağı kayıyor, bunu düzenle
         float mergeTargetPosX = items[1].transform.position.x;
-
+        Vector3 mergeMidScale = items[1].transform.localScale;
+        Vector3 mergeLeftScale = items[0].transform.localScale;
+        Vector3 mergeRightScale = items[2].transform.localScale;
+        // Middle Item
+        LeanTween.scale(items[1].gameObject, mergeMidScale + new Vector3(0.04f, 0.04f, 0.04f), _splashScaleDuration)
+            .setEase(_splashScaleEase)
+            .setDelay(0.05f);
+        // Left Item
         LeanTween.moveX(items[0].gameObject, mergeTargetPosX, _splashDuration)
             .setEase(_splashEase)
-            .setOnComplete(() => FinishMerge(items));
-
+            .setOnComplete(() => { 
+               FinishMerge(items);
+            });
+        LeanTween.scale(items[0].gameObject, new Vector3(0f, 0f, 0f), _splashDuration)
+            .setEase(_splashEase);
+        // Right Item
         LeanTween.moveX(items[2].gameObject, mergeTargetPosX, _splashDuration)
+            .setEase(_splashEase);
+        LeanTween.scale(items[2].gameObject, new Vector3(0f, 0f, 0f), _splashDuration)
             .setEase(_splashEase);
     }
 
