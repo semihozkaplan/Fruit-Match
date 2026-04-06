@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemSpotManager : MonoBehaviour
-{
+{   
+    // TODO: Itemler henüz patlamadan, sola kayma sorunu var
+    // TODO: Particle position tam center değil gibi duruyor
     [Header("Elements")]
     [SerializeField] private Transform _itemSpotsParent;
     private ItemSpot[] _itemSpots;
@@ -153,12 +155,17 @@ public class ItemSpotManager : MonoBehaviour
             items[i].ItemSpot.ClearItem();
             //Destroy(items[i].gameObject);
         }
-
-        // If all items that has been selected all merged, and no items moving to left
+        // If all items that has been selected merged, and no items moving to left
         if (_itemMergeDataDictionary.Count <= 0)
         {
             _isBusy = false;
         }
+        // TODO: BUG Burada galiba burayı CHECK et!!!! BUG KESİNLİKLE BURADA BURAYI FİXLE DAHA SONRA
+        // Completecallback çalışmıyor olabilir, HandleAllItemsMovedLeft callback'e bir bak bakalım
+        // callbackInvoked bool değişkeninden dolayı bence callback çağırılmıyor burada sorun var
+        // Merge bittikten sonra sola kaymalı işlemler
+        // ....
+        // ....
         else
         {
             MoveItemsToTheLeftSide(HandleAllItemsMovedLeft);
@@ -231,9 +238,11 @@ public class ItemSpotManager : MonoBehaviour
                 return;
             }
 
+            // Move other items to the left
             MoveItemToTargetSpot(item, targetSpot, () => HandleItemPlacedOnCorrectSpot(item, false));
         }
 
+        // Then place our new coming items next to the same type
         MoveItemToTargetSpot(comingItem, correctSpot, () => HandleItemPlacedOnCorrectSpot(comingItem));
     }
 
