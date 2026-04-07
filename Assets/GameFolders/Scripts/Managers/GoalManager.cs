@@ -1,8 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GoalManager : MonoBehaviour
 {
+    [Header("Elements")]
+    [SerializeField] private Transform _goalCardParent;
+    [SerializeField] private GoalCard _goalCardPrefab;
+
     private ItemLevelData[] _itemDataGoals;
+    private List<GoalCard> _goalCards = new List<GoalCard>();
 
     private void OnEnable()
     {
@@ -19,6 +25,23 @@ public class GoalManager : MonoBehaviour
     private void HandleLevelSpawned(LevelController level)
     {
         _itemDataGoals = level.GetLevelGoals();
+
+        GenerateGoalCards();
+    }
+
+    private void GenerateGoalCards()
+    {
+        for (int i = 0; i < _itemDataGoals.Length; i++)
+        {
+            GenerateGoalCard(_itemDataGoals[i]);
+        }
+    }
+
+    private void GenerateGoalCard(ItemLevelData goalData)
+    {
+        GoalCard goalCard = Instantiate(_goalCardPrefab, _goalCardParent);
+        goalCard.InitializeText(goalData.itemAmount);
+        _goalCards.Add(goalCard);
     }
 
     private void HandleItemSelected(Item item)
@@ -32,6 +55,8 @@ public class GoalManager : MonoBehaviour
 
             if (_itemDataGoals[i].itemAmount <= 0)
                 CompleteGoal(i);
+            else
+                _goalCards[i].UpdateGoalText(_itemDataGoals[i].itemAmount);
 
             break;
         }
@@ -40,6 +65,8 @@ public class GoalManager : MonoBehaviour
     private void CompleteGoal(int goalIndex)
     {
         Debug.Log($"Goal Completed: {_itemDataGoals[goalIndex].itemPrefab.ItemType}");
+        _goalCards[goalIndex].CompleteGoal();
+        CheckForLevelCompleted();
     }
 
     private void CheckForLevelCompleted()
