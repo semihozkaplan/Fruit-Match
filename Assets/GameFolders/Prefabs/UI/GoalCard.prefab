@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 22.9967}
-  m_SizeDelta: {x: -21.2162, y: -94.5641}
+  m_AnchoredPosition: {x: -0.000015258789, y: 23.6035}
+  m_SizeDelta: {x: 0, y: -81.2874}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2005753055546931001
 CanvasRenderer:
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: ebc541351a11aa24a9b5e1efc1902b47, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -372,6 +372,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5323878265217206482}
   - component: {fileID: 9173740844517570207}
+  - component: {fileID: 5389610326911580296}
   - component: {fileID: 7366731565803485217}
   m_Layer: 0
   m_Name: GoalCard
@@ -390,7 +391,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7465953927211902248}
   - {fileID: 2599006147432927771}
@@ -402,7 +403,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 0}
+  m_SizeDelta: {x: 150, y: 230}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9173740844517570207
 MonoBehaviour:
@@ -424,6 +425,28 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!95 &5389610326911580296
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7198066734375643422}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2614808578087e2478c809e6c1e107e1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7366731565803485217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,6 +460,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoalCard
   _goalAmountTxt: {fileID: 4281873412487726683}
+  _itemIcon: {fileID: 5119572007333336685}
+  _tickIcon: {fileID: 8203836596828895576}
+  _backFace: {fileID: 7171688018903603911}
+  _animator: {fileID: 5389610326911580296}
 --- !u!1 &8203836596828895576
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +476,7 @@ GameObject:
   - component: {fileID: 2598814173729486171}
   - component: {fileID: 2194207084336731871}
   m_Layer: 0
-  m_Name: CheckMark
+  m_Name: TickIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -9,7 +9,10 @@ public struct ItemLevelData
     [NaughtyAttributes.AllowNesting]
     [Range(0,100)]
     public int itemAmount;
+
     public bool isGoal;
+
+    public Sprite itemIcon;
 
     private bool CheckItemAmount() => itemAmount % 3 == 0;
 }

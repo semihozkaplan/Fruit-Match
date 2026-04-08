@@ -16,10 +16,12 @@ public class Item : MonoBehaviour
     [Header("Data")]
     [SerializeField] private EItemType _itemType;
     public EItemType ItemType => _itemType;
+    [SerializeField] private Sprite _itemIcon;
+    public Sprite ItemIcon => _itemIcon;
 
     void Awake()
     {
-        _baseMat = _renderer.material;    
+        _baseMat = _renderer.material;
     }
 
     public void DisableShadows()

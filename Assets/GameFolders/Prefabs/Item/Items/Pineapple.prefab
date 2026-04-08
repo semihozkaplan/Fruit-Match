@@ -190,3 +190,4 @@ MonoBehaviour:
   _collider: {fileID: 1521705188553045694}
   _renderer: {fileID: 1009381740002613567}
   _itemType: 0
+  _itemIcon: {fileID: 21300000, guid: aec702e0819647b498e360131f91d06d, type: 3}
