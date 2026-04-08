@@ -11,6 +11,11 @@ public class GoalCard : MonoBehaviour
     [SerializeField] private GameObject _backFace;
     [SerializeField] private Animator _animator;
 
+    private void Update()
+    {
+        _backFace.SetActive(Vector3.Dot(Vector3.forward, transform.forward) < 0);
+    }
+
     public void InitializeCard(int firstAmount, Sprite itemIcon)
     {
         _goalAmountTxt.text = firstAmount.ToString();
@@ -27,9 +32,8 @@ public class GoalCard : MonoBehaviour
     private void CardAnim()
     {
         LeanTween.cancel(gameObject);
-        transform.localScale = Vector3.one;
 
-        LeanTween.scale(gameObject, Vector3.one * 1.2f, 0.08f)
+        LeanTween.scale(transform.GetChild(0).gameObject, Vector3.one * 1.1f, 0.08f)
             .setLoopPingPong(1);
     }
 

@@ -2171,7 +2171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoalManager
   _goalCardParent: {fileID: 2001756981}
-  _goalCardPrefab: {fileID: 7366731565803485217, guid: 1b6a17a4361628340894006b7ee22f74, type: 3}
+  _goalCardPrefab: {fileID: 4560694769477067437, guid: 1b6a17a4361628340894006b7ee22f74, type: 3}
 --- !u!1001 &666858980110235189
 PrefabInstance:
   m_ObjectHideFlags: 0
